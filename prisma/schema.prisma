@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime  @default(now())
+  products     Product[]
+  upvotes      Upvote[]
+  comments     Comment[]
+}
+
+// A Product can be re-launched, so launch state/timing lives on Product
+// directly rather than a separate join table — one active launch per product.
+model Product {
+  id           String    @id @default(cuid())
+  slug         String    @unique
+  name         String
+  tagline      String
+  description  String
+  websiteUrl   String
+  imageUrl     String?
+  launchesAt   DateTime  @default(now())
+  createdById  String
+  createdBy    User      @relation(fields: [createdById], references: [id])
+  upvotes      Upvote[]
+  comments     Comment[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([launchesAt])
+}
+
+model Upvote {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  userId    String
+  productId String
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
