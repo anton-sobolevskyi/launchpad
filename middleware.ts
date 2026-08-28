@@ -1,22 +1,18 @@
-import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import { authConfig } from "@/auth.config";
+import { getToken } from "next-auth/jwt";
+import type { NextRequest } from "next/server";
 
-// A separate, edge-safe NextAuth instance built from the shared config,
-// deliberately NOT importing from "@/auth" (which pulls in Prisma and
-// bcrypt — both unsupported on the Edge runtime middleware runs on).
-// Reading/verifying the JWT session cookie doesn't need the database,
-// so this lighter instance is all middleware requires.
-const { auth } = NextAuth(authConfig);
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
 
-export default auth((req) => {
-  const isLoggedIn = !!req.auth;
-  if (!isLoggedIn) {
+  if (!token) {
     const loginUrl = new URL("/auth/login", req.nextUrl.origin);
     loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
     return NextResponse.redirect(loginUrl);
   }
-});
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: ["/dashboard/:path*", "/submit"],
