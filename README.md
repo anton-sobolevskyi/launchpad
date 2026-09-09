@@ -8,10 +8,12 @@ Product Hunt-style launch platform built as a deliberate showcase of **Next.js 1
 
 ## Goals / Purpose
 
-- Showcase modern Next.js App Router patterns in a realistic product
-- Demonstrate ISR, parallel/intercepting routes, Server Actions, and streaming
-- Provide a small full-stack app with auth, DB, and optional AI
-- Portfolio / learning project focused on “Next.js the right way”
+Portfolio project built to demonstrate full-stack Next.js skills relevant to job applications:
+
+- Modern App Router patterns in a realistic product (not a toy todo app)
+- ISR, parallel/intercepting routes, Server Actions, streaming, and middleware
+- Auth, PostgreSQL + Prisma, and optional AI (tagline suggestions)
+- Deployed on Vercel end-to-end
 
 ## Features
 
@@ -31,6 +33,7 @@ Product Hunt-style launch platform built as a deliberate showcase of **Next.js 1
 | Database     | PostgreSQL + Prisma           |
 | Auth         | Auth.js v5 (Credentials)      |
 | AI           | Vercel AI SDK + OpenRouter    |
+| Deploy       | Vercel                        |
 | Language     | TypeScript                    |
 
 ## Architecture Highlights
@@ -156,4 +159,4 @@ npm start
 
 ## License
 
-Personal project. Free to use for learning purposes.
+Portfolio project. Free to use for learning purposes.
